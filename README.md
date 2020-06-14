@@ -9,6 +9,13 @@ Everything is straight forward. There is no need for terminal or anything. Just 
 Do the following step by step:
 - Create a folder name ``FontFreak`` in the internal storage.
 - Copy your fonts and paste in this folder.
+- For Bengali fonts, rename according to this chart.
+- __At least ``1.ttf`` should be present for changes to take effect.__
+  ```
+  Regular > 1.ttf
+  Bold > 2.ttf
+  Medium > 3.ttf
+  ```
 - For Roboto (Standard), rename according to this chart.
 - __At least ``101.ttf`` should be present for changes to take effect.__
   ```
