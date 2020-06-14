@@ -1,40 +1,6 @@
 FREAKDIR=/sdcard/FontFreak
 FONTDIR=$MODPATH/fonts
 
-ttfbn() {
-	if [ -f "$FREAKDIR/1.ttf" ]; then
-		autoR=$FREAKDIR/1.ttf
-	else
-		otfbn
-	fi
-	if [ -f "$FREAKDIR/2.ttf" ]; then
-		autoB=$FREAKDIR/2.ttf
-	else
-		autoB=$autoR
-	fi
-	if [ -f "$FREAKDIR/3.ttf" ]; then
-		autoM=$FREAKDIR/3.ttf
-	else
-		autoM=$autoR
-}
-
-otfbn() {
-	if [ -f "$FREAKDIR/1.otf" ]; then
-		autoR=$FREAKDIR/1.otf
-	else
-		otfbn
-	fi
-	if [ -f "$FREAKDIR/2.otf" ]; then
-		autoB=$FREAKDIR/2.otf
-	else
-		autoB=$autoR
-	fi
-	if [ -f "$FREAKDIR/3.otf" ]; then
-		autoM=$FREAKDIR/3.otf
-	else
-		autoM=$autoR
-}
-
 ttf100() {
 	if [ -f "$FREAKDIR/101.ttf" ]; then
 		auto101=$FREAKDIR/101.ttf
@@ -280,21 +246,6 @@ otf400() {
 }
 
 produce() {
-	if [[ -n $autoR ]]; then
-		cp -f $autoB $FONTDIR/NotoSansBengali-Bold.otf
-		cp -f $autoB $FONTDIR/NotoSansBengaliUI-Bold.otf
-		cp -f $autoM $FONTDIR/NotoSansBengali-Medium.otf
-		cp -f $autoM $FONTDIR/NotoSansBengaliUI-Medium.otf
-		cp -f $autoR $FONTDIR/NotoSansBengali-Regular.otf
-		cp -f $autoR $FONTDIR/NotoSansBengaliUI-Regular.otf
-		cp -f $autoB $FONTDIR/NotoSansBengali-Bold.ttf
-		cp -f $autoB $FONTDIR/NotoSansBengaliUI-Bold.ttf
-		cp -f $autoR $FONTDIR/NotoSansBengali-Regular.ttf
-		cp -f $autoR $FONTDIR/NotoSansBengaliUI-Regular.ttf
-		cp -f $autoB $FONTDIR/NotoSerifBengali-Bold.ttf
-		cp -f $autoR $FONTDIR/NotoSerifBengali-Regular.ttf
-		cp -f $autoR $FONTDIR/DroidSansBengali.ttf
-	fi
 	if [[ -n $auto101 ]]; then
 		cp -f $auto101 $FONTDIR/Regular.ttf
 		cp -f $auto102 $FONTDIR/Italic.ttf
@@ -328,9 +279,6 @@ produce() {
 }
 
 destroy() {
-	rm -rf $FONTDIR/1.ttf
-	rm -rf $FONTDIR/2.ttf
-	rm -rf $FONTDIR/3.ttf
 	rm -rf $FONTDIR/101.ttf
 	rm -rf $FONTDIR/102.ttf
 	rm -rf $FONTDIR/103.ttf
@@ -353,9 +301,6 @@ destroy() {
 	rm -rf $FONTDIR/208.ttf
 	rm -rf $FONTDIR/301.ttf
 	rm -rf $FONTDIR/401.ttf
-	rm -rf $FONTDIR/1.otf
-	rm -rf $FONTDIR/2.otf
-	rm -rf $FONTDIR/3.otf
 	rm -rf $FONTDIR/101.otf
 	rm -rf $FONTDIR/102.otf
 	rm -rf $FONTDIR/103.otf
@@ -381,7 +326,6 @@ destroy() {
 	rm -rf $FONTDIR/.placeholder
 }
 
-ttfbn
 ttf100
 ttf200
 ttf300
