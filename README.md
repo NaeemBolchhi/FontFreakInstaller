@@ -7,7 +7,7 @@ Install custom fonts on your own terms.
 ## Usage
 Everything is straight forward. There is no need for terminal or anything. Just Magisk Manager and you're ready to go.
 Do the following step by step:
-- Create a folder name ``FontFreak`` in the internal storage.
+- Create a folder named ``FontFreak`` in the internal storage.
 - Copy your fonts and paste in this folder.
 - For Bengali fonts, rename according to this chart.
 - __At least ``1.ttf`` should be present for changes to take effect.__
