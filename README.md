@@ -4,18 +4,6 @@ This a font module for Magisk, based on nongthaihoang's CFI. FFI makes the usage
 ## Description
 Install custom fonts on your own terms.
 
-### Changelog
-#### v1.00
-* Initial release
-* Based on nongthaihoang's CFI.
-#### v1.01
-* Minor bugfix
-* Removed Bengali support
-#### v1.02
-* Improved font rename logic
-* Added Bengali Support
-* Updated with CFI v1.8 (no backup)
-
 ## Usage
 Everything is straight forward. There is no need for terminal or anything. Just Magisk Manager and you're ready to go.
 Do the following step by step:
