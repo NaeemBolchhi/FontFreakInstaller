@@ -1,3 +1,4 @@
+ORIGDIR=/sbin/.magisk/mirror
 FONTDIR=$MODPATH/fonts
 SYSFONT=$MODPATH/system/fonts
 PRDFONT=$MODPATH/system/product/fonts
@@ -7,20 +8,13 @@ MODPROP=$MODPATH/module.prop
 
 patch() {
 	cp $ORIGDIR/system/etc/fonts.xml $SYSXML
-	sed -i '/\"sans-serif\">/,/family>/H;1,/family>/{/family>/G}' $SYSXML
-	sed -i ':a;N;$!ba;s/name=\"sans-serif\"//2' $SYSXML
+	sed -i '/"sans-serif">/,/family>/H;1,/family>/{/family>/G}' $SYSXML
+	sed -i ':a;N;$!ba;s/name="sans-serif"//2' $SYSXML
 	COUNT=0
 	set BlackItalic Black BoldItalic Bold MediumItalic Medium Italic Regular LightItalic Light ThinItalic Thin
 	for i do
 		if [ -f $SYSFONT/$i.ttf ]; then
-			sed -i "/\"sans-serif\">/,/family>/s/Roboto-$i/$i/" $SYSXML
-			if [ $API -ge 29 ] && i=$(grep NotoSerif $SYSXML) && i=$(grep SourceSansPro $SYSXML); then
-				sed -i "s/NotoSerif-$i/$i/" $SYSXML
-				case $i in
-					Medium*) sed -i 's/SourceSansPro-SemiBold/Medium/' $SYSXML;;
-					*) sed -i "s/SourceSansPro-$i/$i/" $SYSXML;;
-				esac
-			fi
+			sed -i "/"sans-serif">/,/family>/s/Roboto-$i/$i/" $SYSXML
 			COUNT=$((COUNT + 1))
 		fi
 		if [ -f $SYSFONT/Condensed-$i.ttf ]; then
@@ -43,17 +37,17 @@ clean_up() { rmdir -p $SYSETC $PRDFONT $SYSFONT; }
 
 pixel() {
 	if [ -f $ORIGDIR/product/fonts/GoogleSans-Regular.ttf ]; then
-		DEST=$PRDFONT
+		DST=$PRDFONT
 	elif [ -f $ORIGDIR/system/fonts/GoogleSans-Regular.ttf ]; then
-		DEST=$SYSFONT
+		DST=$SYSFONT
 	fi
-	if [ ! -z $DEST ]; then
-		cp $SYSFONT/Regular.ttf $DEST/GoogleSans-Regular.ttf
-		cp $SYSFONT/Italic.ttf $DEST/GoogleSans-Italic.ttf
-		cp $SYSFONT/Medium.ttf $DEST/GoogleSans-Medium.ttf
-		cp $SYSFONT/MediumItalic.ttf $DEST/GoogleSans-MediumItalic.ttf
-		cp $SYSFONT/Bold.ttf $DEST/GoogleSans-Bold.ttf
-		cp $SYSFONT/BoldItalic.ttf $DEST/GoogleSans-BoldItalic.ttf
+	if [ ! -z $DST ]; then
+		cp $SYSFONT/Regular.ttf $DST/GoogleSans-Regular.ttf
+		cp $SYSFONT/Italic.ttf $DST/GoogleSans-Italic.ttf
+		cp $SYSFONT/Medium.ttf $DST/GoogleSans-Medium.ttf
+		cp $SYSFONT/MediumItalic.ttf $DST/GoogleSans-MediumItalic.ttf
+		cp $SYSFONT/Bold.ttf $DST/GoogleSans-Bold.ttf
+		cp $SYSFONT/BoldItalic.ttf $DST/GoogleSans-BoldItalic.ttf
 		sed -ie 3's/$/-pxl&/' $MODPROP
 		PXL=true
 	fi
@@ -79,42 +73,32 @@ miui() {
 		for i do
 			if [ -f $SYSFONT/$i.ttf ]; then
 				if [ $i = Black ]; then
-					sed -i '/\"mipro-bold\"/,/family>/{/700/,/>/s/MiLanProVF/Black/;/stylevalue=\"700\"/d}' $SYSXML
-					sed -i '/\"mipro-heavy\"/,/family>/{/400/,/>/s/MiLanProVF/Black/;/stylevalue=\"700\"/d}' $SYSXML
+					sed -i '/"mipro-bold"/,/family>/{/700/s/MiLanProVF/Black/;/stylevalue="700"/d}' $SYSXML
+					sed -i '/"mipro-heavy"/,/family>/{/400/s/MiLanProVF/Black/;/stylevalue="700"/d}' $SYSXML
 				elif [ $i = Bold ]; then
-					sed -i '/\"miui\"/,/family>/{/700/,/>/s/MiLanProVF/Bold/;/stylevalue=\"400\"/d}' $SYSXML
-					sed -i '/\"miui-bold\"/,/family>/{/700/,/>/s/MiLanProVF/Bold/;/stylevalue=\"480\"/d}' $SYSXML
-					sed -i '/\"mipro\"/,/family>/{/700/,/>/s/MiLanProVF/Bold/;/stylevalue=\"400\"/d}' $SYSXML
-					sed -i '/\"mipro-medium\"/,/family>/{/700/,/>/s/MiLanProVF/Bold/;/stylevalue=\"480\"/d}' $SYSXML
-					sed -i '/\"mipro-demibold\"/,/family>/{/700/,/>/s/MiLanProVF/Bold/;/stylevalue=\"540\"/d}' $SYSXML
-					sed -i '/\"mipro-semibold\"/,/family>/{/700/,/>/s/MiLanProVF/Bold/;/stylevalue=\"630\"/d}' $SYSXML
-					sed -i '/\"mipro-bold\"/,/family>/{/400/,/>/s/MiLanProVF/Bold/;/stylevalue=\"630\"/d}' $SYSXML
+					sed -i '/"mipro"/,/family>/{/700/s/MiLanProVF/Bold/;/stylevalue="400"/d}' $SYSXML
+					sed -i '/"mipro-medium"/,/family>/{/700/s/MiLanProVF/Bold/;/stylevalue="480"/d}' $SYSXML
+					sed -i '/"mipro-demibold"/,/family>/{/700/s/MiLanProVF/Bold/;/stylevalue="540"/d}' $SYSXML
+					sed -i '/"mipro-semibold"/,/family>/{/700/s/MiLanProVF/Bold/;/stylevalue="630"/d}' $SYSXML
+					sed -i '/"mipro-bold"/,/family>/{/400/s/MiLanProVF/Bold/;/stylevalue="630"/d}' $SYSXML
 				elif [ $i = Medium ]; then
-					sed -i '/\"miui-regular\"/,/family>/{/700/,/>/s/MiLanProVF/Medium/;/stylevalue=\"400\"/d}' $SYSXML
-					sed -i '/\"miui-bold\"/,/family>/{/400/,/>/s/MiLanProVF/Medium/;/stylevalue=\"400\"/d}' $SYSXML
-					sed -i '/\"mipro-regular\"/,/family>/{/700/,/>/s/MiLanProVF/Medium/;/stylevalue=\"400\"/d}' $SYSXML
-					sed -i '/\"mipro-medium\"/,/family>/{/400/,/>/s/MiLanProVF/Medium/;/stylevalue=\"400\"/d}' $SYSXML
-					sed -i '/\"mipro-demibold\"/,/family>/{/400/,/>/s/MiLanProVF/Medium/;/stylevalue=\"480\"/d}' $SYSXML
-					sed -i '/\"mipro-semibold\"/,/family>/{/400/,/>/s/MiLanProVF/Medium/;/stylevalue=\"540\"/d}' $SYSXML
+					sed -i '/"mipro-regular"/,/family>/{/700/s/MiLanProVF/Medium/;/stylevalue="400"/d}' $SYSXML
+					sed -i '/"mipro-medium"/,/family>/{/400/s/MiLanProVF/Medium/;/stylevalue="400"/d}' $SYSXML
+					sed -i '/"mipro-demibold"/,/family>/{/400/s/MiLanProVF/Medium/;/stylevalue="480"/d}' $SYSXML
+					sed -i '/"mipro-semibold"/,/family>/{/400/s/MiLanProVF/Medium/;/stylevalue="540"/d}' $SYSXML
 				elif [ $i = Regular ]; then
-					sed -i '/\"miui\"/,/family>/{/400/,/>/s/MiLanProVF/Regular/;/stylevalue=\"340\"/d}' $SYSXML
-					sed -i '/\"miui-light\"/,/family>/{/700/,/>/s/MiLanProVF/Regular/;/stylevalue=\"340\"/d}' $SYSXML
-					sed -i '/\"miui-regular\"/,/family>/{/400/,/>/s/MiLanProVF/Regular/;/stylevalue=\"340\"/d}' $SYSXML
-					sed -i '/\"mipro\"/,/family>/{/400/,/>/s/MiLanProVF/Regular/;/stylevalue=\"340\"/d}' $SYSXML
-					sed -i '/\"mipro-light\"/,/family>/{/700/,/>/s/MiLanProVF/Regular/;/stylevalue=\"305\"/d}' $SYSXML
-					sed -i '/\"mipro-normal\"/,/family>/{/700/,/>/s/MiLanProVF/Regular/;/stylevalue=\"340\"/d}' $SYSXML
-					sed -i '/\"mipro-regular\"/,/family>/{/400/,/>/s/MiLanProVF/Regular/;/stylevalue=\"340\"/d}' $SYSXML
+					sed -i '/"mipro"/,/family>/{/400/s/MiLanProVF/Regular/;/stylevalue="340"/d}' $SYSXML
+					sed -i '/"mipro-light"/,/family>/{/700/s/MiLanProVF/Regular/;/stylevalue="305"/d}' $SYSXML
+					sed -i '/"mipro-normal"/,/family>/{/700/s/MiLanProVF/Regular/;/stylevalue="340"/d}' $SYSXML
+					sed -i '/"mipro-regular"/,/family>/{/400/s/MiLanProVF/Regular/;/stylevalue="340"/d}' $SYSXML
 				elif [ $i = Light ]; then
-					sed -i '/\"miui-thin\"/,/family>/{/700/,/>/s/MiLanProVF/Light/;/stylevalue=\"250\"/d}' $SYSXML
-					sed -i '/\"miui-light\"/,/family>/{/400/,/>/s/MiLanProVF/Light/;/stylevalue=\"250\"/d}' $SYSXML
-					sed -i '/\"mipro-thin\"/,/family>/{/700/,/>/s/MiLanProVF/Light/;/stylevalue=\"200\"/d}' $SYSXML
-					sed -i '/\"mipro-extralight\"/,/family>/{/700/,/>/s/MiLanProVF/Light/;/stylevalue=\"250\"/d}' $SYSXML
-					sed -i '/\"mipro-light\"/,/family>/{/400/,/>/s/MiLanProVF/Light/;/stylevalue=\"200\"/d}' $SYSXML
-					sed -i '/\"mipro-normal\"/,/family>/{/400/,/>/s/MiLanProVF/Light/;/stylevalue=\"305\"/d}' $SYSXML
+					sed -i '/"mipro-thin"/,/family>/{/700/s/MiLanProVF/Light/;/stylevalue="200"/d}' $SYSXML
+					sed -i '/"mipro-extralight"/,/family>/{/700/s/MiLanProVF/Light/;/stylevalue="250"/d}' $SYSXML
+					sed -i '/"mipro-light"/,/family>/{/400/s/MiLanProVF/Light/;/stylevalue="250"/d}' $SYSXML
+					sed -i '/"mipro-normal"/,/family>/{/400/s/MiLanProVF/Light/;/stylevalue="305"/d}' $SYSXML
 				elif [ $i = Thin ]; then
-					sed -i '/\"miui-thin\"/,/family>/{/400/,/>/s/MiLanProVF/Thin/;/stylevalue=\"150\"/d}' $SYSXML
-					sed -i '/\"mipro-thin\"/,/family>/{/400/,/>/s/MiLanProVF/Thin/;/stylevalue=\"150\"/d}' $SYSXML
-					sed -i '/\"mipro-extralight\"/,/family>/{/400/,/>/s/MiLanProVF/Thin/;/stylevalue=\"200\"/d}' $SYSXML
+					sed -i '/"mipro-thin"/,/family>/{/400/s/MiLanProVF/Thin/;/stylevalue="150"/d}' $SYSXML
+					sed -i '/"mipro-extralight"/,/family>/{/400/s/MiLanProVF/Thin/;/stylevalue="200"/d}' $SYSXML
 				fi
 			fi
 		done
@@ -125,7 +109,7 @@ miui() {
 
 lg() {
 	if i=$(grep lg-sans-serif $SYSXML); then
-		sed -i '/\"lg-sans-serif\">/,/family>/{/\"lg-sans-serif\">/!d};/\"sans-serif\">/,/family>/{/\"sans-serif\">/!H};/\"lg-sans-serif\">/G' $SYSXML
+		sed -i '/"lg-sans-serif">/,/family>/{/"lg-sans-serif">/!d};/"sans-serif">/,/family>/{/"sans-serif">/!H};/"lg-sans-serif">/G' $SYSXML
 		LG=true
 	fi
 	if [ -f $ORIGDIR/system/etc/fonts_lge.xml ]; then
@@ -153,7 +137,6 @@ rom() {
 }
 
 ### INSTALLATION ###
-
 mkdir -p $SYSFONT $SYSETC $PRDFONT
 cp $FONTDIR/* $SYSFONT
 patch
@@ -164,4 +147,3 @@ rom
 ### CLEAN UP ###
 ui_print "- A little housekeeping..."
 clean_up
-ui_print " "

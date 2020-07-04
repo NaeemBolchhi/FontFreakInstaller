@@ -4,11 +4,30 @@ This a font module for Magisk, based on nongthaihoang's CFI. FFI makes the usage
 ## Description
 Install custom fonts on your own terms.
 
+## Changelog
+### v1.00
+* Initial release
+* Based on nongthaihoang's CFI.
+### v1.01
+* Minor bugfix
+* Removed Bengali support
+### v1.02
+* Improved font rename logic
+* Added Bengali Support
+* Updated with CFI v1.8 (no backup)
+
 ## Usage
 Everything is straight forward. There is no need for terminal or anything. Just Magisk Manager and you're ready to go.
 Do the following step by step:
 - Create a folder named ``FontFreak`` in the internal storage.
 - Copy your fonts and paste in this folder.
+- For Bengali, rename according to this chart.
+- __At least ``1.ttf`` should be present for changes to take effect.__
+  ```
+  Regular > 1.ttf
+  Medium > 2.ttf
+  Bold > 3.ttf
+  ```
 - For Roboto (Standard), rename according to this chart.
 - __At least ``101.ttf`` should be present for changes to take effect.__
   ```
@@ -45,8 +64,9 @@ Do the following step by step:
   ```
 - For Monospace, rename to ``301.ttf``.
 - For Emoji, rename to ``401.ttf``.
-- For the rest, rename to font name you want to replace in ```/system/fonts```.
+- For the rest, rename to the font name you want to replace in ```/system/fonts```.
 - Finally, flash the FFI zip in Magisk and reboot.
+- __NOTE: OTF files will also work. Rename similarly to these lists.__
 
 ## Thanks
 - [MMT-Extended](https://github.com/Zackptg5/MMT-Extended)
