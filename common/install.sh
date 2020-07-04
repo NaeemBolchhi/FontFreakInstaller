@@ -147,3 +147,4 @@ rom
 ### CLEAN UP ###
 ui_print "- A little housekeeping..."
 clean_up
+ui_print " "
