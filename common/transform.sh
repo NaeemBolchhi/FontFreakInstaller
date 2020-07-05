@@ -355,19 +355,44 @@ destroy() {
 	rm -rf $FONTDIR/208.ttf
 	rm -rf $FONTDIR/301.ttf
 	rm -rf $FONTDIR/401.ttf
+	rm -rf $FONTDIR/1.otf
+	rm -rf $FONTDIR/2.otf
+	rm -rf $FONTDIR/3.otf
+	rm -rf $FONTDIR/101.otf
+	rm -rf $FONTDIR/102.otf
+	rm -rf $FONTDIR/103.otf
+	rm -rf $FONTDIR/104.otf
+	rm -rf $FONTDIR/105.otf
+	rm -rf $FONTDIR/106.otf
+	rm -rf $FONTDIR/107.otf
+	rm -rf $FONTDIR/108.otf
+	rm -rf $FONTDIR/109.otf
+	rm -rf $FONTDIR/110.otf
+	rm -rf $FONTDIR/111.otf
+	rm -rf $FONTDIR/112.otf
+	rm -rf $FONTDIR/201.otf
+	rm -rf $FONTDIR/202.otf
+	rm -rf $FONTDIR/203.otf
+	rm -rf $FONTDIR/204.otf
+	rm -rf $FONTDIR/205.otf
+	rm -rf $FONTDIR/206.otf
+	rm -rf $FONTDIR/207.otf
+	rm -rf $FONTDIR/208.otf
+	rm -rf $FONTDIR/301.otf
+	rm -rf $FONTDIR/401.otf
 	rm -rf $FONTDIR/.placeholder
 }
 
 [ -f "$FREAKDIR/1.ttf" ] && ttf123 || auto1=""
-[ -z "$auto1" ] && otf123 || auto1=""
+[ -z "$auto1" ] && otf123
 [ -f "$FREAKDIR/101.ttf" ] && ttf100 || auto101=""
-[ -z "$auto101" ] && otf100 || auto101=""
+[ -z "$auto101" ] && otf100
 [ -f "$FREAKDIR/201.ttf" ] && ttf200 || auto201=""
-[ -z "$auto201" ] && otf200 || auto201=""
+[ -z "$auto201" ] && otf200
 [ -f "$FREAKDIR/301.ttf" ] && ttf300 || auto301=""
-[ -z "$auto301" ] && otf300 || auto301=""
+[ -z "$auto301" ] && otf300
 [ -f "$FREAKDIR/401.ttf" ] && ttf400 || auto401=""
-[ -z "$auto401" ] && otf400 || auto401=""
+[ -z "$auto401" ] && otf400
 produce
 cp $FREAKDIR/* $FONTDIR
 destroy
