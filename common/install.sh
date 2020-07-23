@@ -1,4 +1,5 @@
-ORIGDIR=/sbin/.magisk/mirror
+[ ! $MAGISKTMP ] && MAGISKTMP=$(magisk --path)/.magisk
+[ -d $MAGISKTMP ] && ORIGDIR=$MAGISKTMP/mirror
 FONTDIR=$MODPATH/fonts
 SYSFONT=$MODPATH/system/fonts
 PRDFONT=$MODPATH/system/product/fonts
@@ -7,68 +8,54 @@ SYSXML=$SYSETC/fonts.xml
 MODPROP=$MODPATH/module.prop
 
 patch() {
-	cp $ORIGDIR/system/etc/fonts.xml $SYSXML
+	[ -f $ORIGDIR/system/etc/fonts.xml ] && cp $ORIGDIR/system/etc/fonts.xml $SYSXML || abort "! $ORIGDIR/system/etc/fonts.xml: file not found"
 	sed -i '/"sans-serif">/,/family>/H;1,/family>/{/family>/G}' $SYSXML
 	sed -i ':a;N;$!ba;s/name="sans-serif"//2' $SYSXML
-	COUNT=0
+	local count=0
 	set BlackItalic Black BoldItalic Bold MediumItalic Medium Italic Regular LightItalic Light ThinItalic Thin
 	for i do
-		if [ -f $SYSFONT/$i.ttf ]; then
-			sed -i "/"sans-serif">/,/family>/s/Roboto-$i/$i/" $SYSXML
-			COUNT=$((COUNT + 1))
-		fi
-		if [ -f $SYSFONT/Condensed-$i.ttf ]; then
-			sed -i "s/RobotoCondensed-$i/Condensed-$i/" $SYSXML
-			COUNT=$((COUNT + 1))
-	   	fi
+		[ -f $SYSFONT/$i.ttf ] && { sed -i "/\"sans-serif\">/,/family>/s/Roboto-$i/$i/" $SYSXML; count=$((count + 1)); }
+		[ -f $SYSFONT/Condensed-$i.ttf ] && { sed -i "s/RobotoCondensed-$i/Condensed-$i/" $SYSXML; count=$((count + 1)); }
 	done
-	if [ -f $SYSFONT/Mono.ttf ]; then
-		sed -i 's/DroidSans//' $SYSXML
-		COUNT=$((COUNT + 1))
-	fi
-	if [ -f $SYSFONT/Emoji.ttf ]; then
-		sed -i 's/NotoColor//;s/SamsungColor//' $SYSXML
-		COUNT=$((COUNT + 1))
-	fi
-	if [ $COUNT -eq 0 ]; then rm $SYSXML; fi
+	[ -f $SYSFONT/Mono.ttf ] && { sed -i 's/DroidSans//' $SYSXML; count=$((count + 1)); }
+	[ -f $SYSFONT/Emoji.ttf ] && { sed -i 's/NotoColor//;s/SamsungColor//' $SYSXML; count=$((count + 1)); }
+	[ $count -eq 0 ] && rm $SYSXML
 }
 
-clean_up() { rmdir -p $SYSETC $PRDFONT $SYSFONT; }
+clean_up() {
+	rm $MODPATH/LICENSE
+	rmdir -p $SYSETC $PRDFONT
+}
 
 pixel() {
-	if [ -f $ORIGDIR/product/fonts/GoogleSans-Regular.ttf ]; then
-		DST=$PRDFONT
+	local dest
+	if [ -f $ORIGDIR/product/fonts/GoogleSans-Regular.ttf ] || [ -f $ORIGDIR/system/product/fonts/GoogleSans-Regular.ttf ]; then
+		dest=$PRDFONT
 	elif [ -f $ORIGDIR/system/fonts/GoogleSans-Regular.ttf ]; then
-		DST=$SYSFONT
+		dest=$SYSFONT
 	fi
-	if [ ! -z $DST ]; then
-		cp $SYSFONT/Regular.ttf $DST/GoogleSans-Regular.ttf
-		cp $SYSFONT/Italic.ttf $DST/GoogleSans-Italic.ttf
-		cp $SYSFONT/Medium.ttf $DST/GoogleSans-Medium.ttf
-		cp $SYSFONT/MediumItalic.ttf $DST/GoogleSans-MediumItalic.ttf
-		cp $SYSFONT/Bold.ttf $DST/GoogleSans-Bold.ttf
-		cp $SYSFONT/BoldItalic.ttf $DST/GoogleSans-BoldItalic.ttf
-		sed -ie 3's/$/-pxl&/' $MODPROP
-		PXL=true
+	if [ $dest ]; then
+		set BoldItalic Bold MediumItalic Medium Italic Regular
+		for i do cp $SYSFONT/$i.ttf $dest/GoogleSans-$i.ttf; done
+		version pxl
+	else
+		false
 	fi
 }
 
 oxygen() {
 	if [ -f $ORIGDIR/system/fonts/SlateForOnePlus-Regular.ttf ]; then
-		cp $SYSFONT/Black.ttf $SYSFONT/SlateForOnePlus-Black.ttf
-		cp $SYSFONT/Bold.ttf $SYSFONT/SlateForOnePlus-Bold.ttf
-		cp $SYSFONT/Medium.ttf $SYSFONT/SlateForOnePlus-Medium.ttf
-		cp $SYSFONT/Regular.ttf $SYSFONT/SlateForOnePlus-Regular.ttf
+		set Black Bold Medium Regular Light Thin
+		for i do cp $SYSFONT/$i.ttf $SYSFONT/SlateForOnePlus-$i.ttf; done
 		cp $SYSFONT/Regular.ttf $SYSFONT/SlateForOnePlus-Book.ttf
-		cp $SYSFONT/Light.ttf $SYSFONT/SlateForOnePlus-Light.ttf
-		cp $SYSFONT/Thin.ttf $SYSFONT/SlateForOnePlus-Thin.ttf
-		sed -ie 3's/$/-oos&/' $MODPROP
-		OOS=true
+		version oos
+	else
+		false
 	fi
 }
 
 miui() {
-	if i=$(grep miui $SYSXML); then
+	if grep -q miui $SYSXML; then
 		set Black Bold Medium Regular Light Thin
 		for i do
 			if [ -f $SYSFONT/$i.ttf ]; then
@@ -102,46 +89,47 @@ miui() {
 				fi
 			fi
 		done
-		sed -ie 3's/$/-miui&/' $MODPROP
-		MIUI=true
+		version miui
+	else
+		false
 	fi
 }
 
 lg() {
-	if i=$(grep lg-sans-serif $SYSXML); then
+	local lg=false
+	if grep -q lg-sans-serif $SYSXML; then
 		sed -i '/"lg-sans-serif">/,/family>/{/"lg-sans-serif">/!d};/"sans-serif">/,/family>/{/"sans-serif">/!H};/"lg-sans-serif">/G' $SYSXML
-		LG=true
+		lg=true
 	fi
 	if [ -f $ORIGDIR/system/etc/fonts_lge.xml ]; then
 		cp $ORIGDIR/system/etc/fonts_lge.xml $SYSETC
-		LGXML=$SYSETC/fonts_lge.xml
+		local lgxml=$SYSETC/fonts_lge.xml
 		set BlackItalic Black BoldItalic Bold MediumItalic Medium Italic Regular LightItalic Light ThinItalic Thin
-		for i do
-			if [ -f $SYSFONT/$i.ttf ]; then
-				sed -i "/\"default_roboto\">/,/family>/s/Roboto-$i/$i/" $LGXML
-			fi
-		done
-		LG=true
+		for i do [ -f $SYSFONT/$i.ttf ] && sed -i "/\"default_roboto\">/,/family>/s/Roboto-$i/$i/" $lgxml; done
+		lg=true
 	fi
-	if $LG; then sed -ie 3's/$/-lg&/' $MODPROP; fi
+	$lg && version lg || false
+}
+
+samsung() {
+	if grep -q Samsung $SYSXML; then
+		sed -i 's/SECRobotoLight-Bold/Medium/;s/SECRobotoLight-//;s/SECCondensed-/Condensed-/' $SYSXML
+		version sam
+	else
+		false
+	fi
 }
 
 rom() {
-	pixel
-	if ! $PXL; then oxygen
-		if ! $OOS; then miui
-			if ! $MIUI; then lg
-			fi
-		fi
-	fi
+	pixel || oxygen || miui || lg || samsung
 }
+
+version() { sed -i 3"s/$/-$1&/" $MODPROP; }
 
 ### INSTALLATION ###
 mkdir -p $SYSFONT $SYSETC $PRDFONT
-cp $FONTDIR/* $SYSFONT
+cp $FONTDIR/* $SYSFONT && chmod 644 $SYSFONT/* || abort "! $FONTDIR: No fonts found..."
 patch
-
-PXL=false; OOS=false; MIUI=false; LG=false
 rom
 
 ### CLEAN UP ###
