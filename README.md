@@ -55,6 +55,7 @@ Do the following step by step:
 - For the rest, rename to the font name you want to replace in ```/system/fonts```.
 - Finally, flash the FFI zip in Magisk and reboot.
 - __NOTE: OTF files will also work. Rename similarly to these lists.__
+- __NOTE 2: If you don't provide a font, it will be replaced by a related variant.__ So, if 202.ttf is not available, 201.ttf will be automatically copied and used for 202.ttf in your device.
 
 ## Thanks
 - [MMT-Extended](https://github.com/Zackptg5/MMT-Extended)
