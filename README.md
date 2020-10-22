@@ -60,5 +60,5 @@ Do the following step by step:
 ## Thanks
 - [Magisk](https://github.com/topjohnwu/Magisk)
 - [MMT-Extended](https://github.com/Zackptg5/MMT-Extended)
-- [CFI](https://github.com/nongthaihoang/custom_font_installer)
+- [Custom Font Installer](https://github.com/nongthaihoang/custom_font_installer)
 - [Cross-Compiled Binaries for Android](https://github.com/Zackptg5/Cross-Compiled-Binaries-Android)
