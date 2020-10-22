@@ -1,3 +1,5 @@
+## Font Freak Installer v1.05
+
 FREAKDIR=/sdcard/FontFreak
 FONTDIR=$MODPATH/fonts
 
@@ -281,22 +283,45 @@ otf400() {
 	fi
 }
 
-produce() {
-	if [[ -n $auto1 ]]; then
+produceBN() {
+	if [ -f $ORIGDIR/system/fonts/NotoSansBengali-Bold.otf ]; then
 		cp -f $auto2 $FONTDIR/NotoSansBengali-Bold.otf
 		cp -f $auto2 $FONTDIR/NotoSansBengaliUI-Bold.otf
 		cp -f $auto3 $FONTDIR/NotoSansBengali-Medium.otf
 		cp -f $auto3 $FONTDIR/NotoSansBengaliUI-Medium.otf
 		cp -f $auto1 $FONTDIR/NotoSansBengali-Regular.otf
 		cp -f $auto1 $FONTDIR/NotoSansBengaliUI-Regular.otf
+	fi
+	if [ -f $ORIGDIR/system/fonts/NotoSansBengali-Bold.ttf ]; then
 		cp -f $auto2 $FONTDIR/NotoSansBengali-Bold.ttf
 		cp -f $auto2 $FONTDIR/NotoSansBengaliUI-Bold.ttf
 		cp -f $auto1 $FONTDIR/NotoSansBengali-Regular.ttf
 		cp -f $auto1 $FONTDIR/NotoSansBengaliUI-Regular.ttf
+	fi
+	if [ -f $ORIGDIR/system/fonts/NotoSerifBengali-Bold.ttf ]; then
 		cp -f $auto2 $FONTDIR/NotoSerifBengali-Bold.ttf
 		cp -f $auto1 $FONTDIR/NotoSerifBengali-Regular.ttf
+	fi
+	if [ -f $ORIGDIR/system/fonts/DroidSansBengali.ttf ]; then
 		cp -f $auto1 $FONTDIR/DroidSansBengali.ttf
 	fi
+	if [ -f $ORIGDIR/system/fonts/SECBengali-Bold.ttf ]; then
+		cp -f $MODPATH/system/fonts/Bold.otf $MODPATH/system/fonts/SECBengali-Bold.ttf
+		cp -f $MODPATH/system/fonts/Bold.otf $MODPATH/system/fonts/SECBengaliUI-Bold.ttf
+		cp -f $MODPATH/system/fonts/Regular.otf $MODPATH/system/fonts/SECBengali-Regular.ttf
+		cp -f $MODPATH/system/fonts/Regular.otf $MODPATH/system/fonts/SECBengaliUI-Regular.ttf
+	fi
+	if [ -f $ORIGDIR/system/fonts/SECBengali-Bold.otf ]; then
+		cp -f $MODPATH/system/fonts/Bold.otf $MODPATH/system/fonts/SECBengali-Bold.otf
+		cp -f $MODPATH/system/fonts/Bold.otf $MODPATH/system/fonts/SECBengaliUI-Bold.otf
+		cp -f $MODPATH/system/fonts/Medium.otf $MODPATH/system/fonts/SECBengali-Medium.otf
+		cp -f $MODPATH/system/fonts/Medium.otf $MODPATH/system/fonts/SECBengaliUI-Medium.otf
+		cp -f $MODPATH/system/fonts/Regular.otf $MODPATH/system/fonts/SECBengali-Regular.otf
+		cp -f $MODPATH/system/fonts/Regular.otf $MODPATH/system/fonts/SECBengaliUI-Regular.otf
+	fi
+}
+
+produceEN() {
 	if [[ -n $auto101 ]]; then
 		cp -f $auto101 $FONTDIR/Regular.ttf
 		cp -f $auto102 $FONTDIR/Italic.ttf
@@ -393,7 +418,11 @@ destroy() {
 [ -z "$auto301" ] && otf300
 [ -f "$FREAKDIR/401.ttf" ] && ttf400 || auto401=""
 [ -z "$auto401" ] && otf400
-produce
+if [[ -n $auto1 ]]; then
+	produceBN
+fi
+produceEN
+
 cp $FREAKDIR/* $FONTDIR
 destroy
 [ -f "$MODPATH/common/install.sh" ] && . $MODPATH/common/install.sh

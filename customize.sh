@@ -1,68 +1,31 @@
-##########################################################################################
-#
-# MMT Extended Config Script
-#
-##########################################################################################
+## Font Freak Installer v1.05
+## Based on CFI 2.3 by nongthaihoang @ XDA
+## MMT-Ex 1.6 underneath
 
-##########################################################################################
-# Config Flags
-##########################################################################################
+# Get Module Prop
+unzip -o "$ZIPFILE" module.prop -d $TMPDIR >&2
+[ ! -f $TMPDIR/module.prop ] && abort "! Unable to extract zip file!"
 
-# Uncomment and change 'MINAPI' and 'MAXAPI' to the minimum and maximum android version for your mod
-# Uncomment DYNLIB if you want libs installed to vendor for oreo+ and system for anything older
-# Uncomment DEBUG if you want full debug logs (saved to /sdcard)
-#MINAPI=21
-#MAXAPI=25
-#DYNLIB=true
-#DEBUG=true
+$BOOTMODE && MODDIRNAME=modules_update || MODDIRNAME=modules
+MODULEROOT=$NVBASE/$MODDIRNAME
+MODID=`grep_prop id $TMPDIR/module.prop`
+MODNAME=`grep_prop name $TMPDIR/module.prop`
+MODAUTH=`grep_prop author $TMPDIR/module.prop`
+MODVERSION=`grep_prop version $TMPDIR/module.prop`
+MODPATH=$MODULEROOT/$MODID
 
-##########################################################################################
-# Replace list
-##########################################################################################
+# Font Freak Banner
+ui_print " "
+ui_print "| █▀▀ █▀█ █▄░█ ▀█▀ █▀▀ █▀█ █▀▀ ▄▀█ █▄▀"
+ui_print "| █▀░ █▄█ █░▀█ ░█░ █▀░ █▀▄ ██▄ █▀█ █░█"
 
-# List all directories you want to directly replace in the system
-# Check the documentations for more info why you would need this
+# Declare Module Name
+ui_print " "
+ui_print "| $MODNAME $MODVERSION"
+ui_print "| $MODAUTH"
+ui_print " "
 
-# Construct your list in the following format
-# This is an example
-REPLACE_EXAMPLE="
-/system/app/Youtube
-/system/priv-app/SystemUI
-/system/priv-app/Settings
-/system/framework
-"
-
-# Construct your own list here
-REPLACE="
-"
-
-##########################################################################################
-# Permissions
-##########################################################################################
-
-set_permissions() {
-  : # Remove this if adding to this function
-
-  # Note that all files/folders in magisk module directory have the $MODPATH prefix - keep this prefix on all of your files/folders
-  # Some examples:
-  
-  # For directories (includes files in them):
-  # set_perm_recursive  <dirname>                <owner> <group> <dirpermission> <filepermission> <contexts> (default: u:object_r:system_file:s0)
-  
-  # set_perm_recursive $MODPATH/system/lib 0 0 0755 0644
-  # set_perm_recursive $MODPATH/system/vendor/lib/soundfx 0 0 0755 0644
-
-  # For files (not in directories taken care of above)
-  # set_perm  <filename>                         <owner> <group> <permission> <contexts> (default: u:object_r:system_file:s0)
-  
-  # set_perm $MODPATH/system/lib/libart.so 0 0 0644
-  # set_perm /data/local/tmp/file.txt 0 0 644
-}
-
-##########################################################################################
-# MMT Extended Logic - Don't modify anything after this
-##########################################################################################
-
+# Jump to Installation
 SKIPUNZIP=1
 unzip -qjo "$ZIPFILE" 'common/functions.sh' -d $TMPDIR >&2
 . $TMPDIR/functions.sh

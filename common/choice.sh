@@ -1,7 +1,10 @@
+## Font Freak Installer v1.05
+
 proceed() {
   ui_print " "
   ui_print "- Installing fonts systemlessly..."
   ui_print " "
+  sleep 0.5
   [ -f "$MODPATH/common/transform.sh" ] && . $MODPATH/common/transform.sh
 }
 
@@ -9,6 +12,7 @@ cancel() {
   ui_print " "
   ui_print "- Cancelling installation..."
   ui_print " "
+  sleep 0.5
   exit 1
 }
 
