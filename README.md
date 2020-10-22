@@ -58,5 +58,7 @@ Do the following step by step:
 - __NOTE 2: If you don't provide a font, it will be replaced by a related variant.__ So, if ``202.ttf`` is not available, ``201.ttf`` will be automatically copied and used for ``202.ttf`` in your device.
 
 ## Thanks
+- [Magisk](https://github.com/topjohnwu/Magisk)
 - [MMT-Extended](https://github.com/Zackptg5/MMT-Extended)
 - [CFI](https://github.com/nongthaihoang/custom_font_installer)
+- [Cross-Compiled Binaries for Android](https://github.com/Zackptg5/Cross-Compiled-Binaries-Android)
